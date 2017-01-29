@@ -44,6 +44,7 @@ function initBareRepository(repo, dir) {
 }
 
 function movePostReceiveHook(repo, dir) {
+    console.log('post receive hook location ' + path.join(__dirname, 'post-receive'));
     var movePostReceiveHook = spawn('cp', [path.join(__dirname, 'post-receive'), dir + '/hooks/post-receive']);
     movePostReceiveHook.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
