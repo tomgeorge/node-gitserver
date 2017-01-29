@@ -1,0 +1,9 @@
+#!/bin/sh
+echo "post-receive hook"
+
+
+ls -l
+
+
+echo "your mom"
+
