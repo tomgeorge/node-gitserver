@@ -36,31 +36,19 @@ server.listen(8080);
 
 function initBareRepository(repo, dir) {
     var ps = spawnSync('git', ['init', '--bare', dir]);
-    ps.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-    });
-    ps.stderr.on('data', (data) => {
-        console.log(`stderr: ${data}`);
-    });
+    console.log(`stdout: ` + ps.stdout);
+    console.log(`stderr: ` + ps.stderr);
 }
 
 function movePostReceiveHook(repo, dir) {
     console.log('post receive hook location ' + path.join(__dirname, 'post-receive'));
     var movePostReceiveHook = spawnSync('cp', [path.join(__dirname, 'post-receive'), dir + '/hooks/post-receive']);
-    movePostReceiveHook.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-    });
-    movePostReceiveHook.stderr.on('data', (data) => {
-        console.log(`stderr: ${data}`);
-    });
+    console.log(`stdout: ` + movePostReceiveHook.stdout);
+    console.log(`stderr: ` + movePostReceiveHook.stderr);
 }
 
 function chmodPostReceiveHook(repo, dir) {
     var chmodPostReceiveHook = spawnSync('chmod', ['a+x', dir + '/hooks/post-receive']);
-    chmodPostReceiveHook.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-    });
-    chmodPostReceiveHook.stderr.on('data', (data) => {
-        console.log(`stderr: ${data}`);
-    });
+    console.log(`stdout: ` + chmodPostReceiveHook.stdout);
+    console.log(`stderr: ` + chmodPostReceiveHook.stderr);
 }
