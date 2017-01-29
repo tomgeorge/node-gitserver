@@ -11,14 +11,9 @@ var server = http.createServer(function (req, res) {
         var dir = path.join(__dirname, 'repos', repo);
         console.log('dir ' + dir);
         if (!fs.existsSync(dir)) {
-            console.log('I don\'t exist');
-            var ps = spawn('git', ['init', '--bare', dir]);
-            ps.stdout.on('data', (data) => {
-                  console.log(`stdout: ${data}`);
-            });
-            ps.stderr.on('data', (data) => {
-                  console.log(`stderr: ${data}`);
-            });
+            initBareRepository(repo, dir);
+            movePostReceiveHook(repo, dir);
+            chmodPostReceiveHook(repo, dir);
         }
 
         var reqStream = req.headers['content-encoding'] == 'gzip' ? req.pipe(zlib.createGunzip()) : req;
@@ -35,3 +30,34 @@ var server = http.createServer(function (req, res) {
                 })).pipe(res);
 });
 server.listen(8080);
+
+
+function initBareRepository(repo, dir) {
+    var ps = spawn('git', ['init', '--bare', dir]);
+    ps.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+    ps.stderr.on('data', (data) => {
+        console.log(`stderr: ${data}`);
+    });
+}
+
+function movePostReceiveHook(repo, dir) {
+    var movePostReceiveHook = spawn('cp', ['post-receive', dir + '/hooks/post-receive']);
+    movePostReceiveHook.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+    movePostReceiveHook.stderr.on('data', (data) => {
+        console.log(`stderr: ${data}`);
+    });
+}
+
+function chmodPostReceiveHook(repo, dir) {
+    var chmodPostReceiveHook = spawn('chmod', ['a+x', dir + '/hooks/post-receive']);
+    chmodPostReceiveHook.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+    chmodPostReceiveHook.stderr.on('data', (data) => {
+        console.log(`stderr: ${data}`);
+    });
+}
