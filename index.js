@@ -1,5 +1,6 @@
 var http = require('http');
 var spawn = require('child_process').spawn;
+var spawnSync = require('child_process').spawnSync;
 var path = require('path');
 var backend = require('git-http-backend');
 var zlib = require('zlib');
@@ -34,7 +35,7 @@ server.listen(8080);
 
 
 function initBareRepository(repo, dir) {
-    var ps = spawn('git', ['init', '--bare', dir]);
+    var ps = spawnSync('git', ['init', '--bare', dir]);
     ps.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
     });
@@ -45,7 +46,7 @@ function initBareRepository(repo, dir) {
 
 function movePostReceiveHook(repo, dir) {
     console.log('post receive hook location ' + path.join(__dirname, 'post-receive'));
-    var movePostReceiveHook = spawn('cp', [path.join(__dirname, 'post-receive'), dir + '/hooks/post-receive']);
+    var movePostReceiveHook = spawnSync('cp', [path.join(__dirname, 'post-receive'), dir + '/hooks/post-receive']);
     movePostReceiveHook.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
     });
@@ -55,7 +56,7 @@ function movePostReceiveHook(repo, dir) {
 }
 
 function chmodPostReceiveHook(repo, dir) {
-    var chmodPostReceiveHook = spawn('chmod', ['a+x', dir + '/hooks/post-receive']);
+    var chmodPostReceiveHook = spawnSync('chmod', ['a+x', dir + '/hooks/post-receive']);
     chmodPostReceiveHook.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
     });
