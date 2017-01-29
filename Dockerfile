@@ -6,6 +6,7 @@ WORKDIR /home/app
 USER app
 ADD package.json $HOME
 ADD index.js $HOME
+ADD post-receive $HOME
 RUN npm install
 RUN mkdir $HOME/repos
 CMD ["node", "index.js"]
