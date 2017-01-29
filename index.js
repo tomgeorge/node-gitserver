@@ -9,6 +9,7 @@ var server = http.createServer(function (req, res) {
         var repo = req.url.split('/')[1];
         console.log('repo ' + repo);
         var dir = path.join(__dirname, 'repos', repo);
+        console.log('dirname + ' + path.join(__dirname));
         console.log('dir ' + dir);
         if (!fs.existsSync(dir)) {
             initBareRepository(repo, dir);
@@ -43,7 +44,7 @@ function initBareRepository(repo, dir) {
 }
 
 function movePostReceiveHook(repo, dir) {
-    var movePostReceiveHook = spawn('cp', ['./post-receive', dir + '/hooks/post-receive']);
+    var movePostReceiveHook = spawn('cp', [path.join(__dirname, 'post-receive'), dir + '/hooks/post-receive']);
     movePostReceiveHook.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
     });
